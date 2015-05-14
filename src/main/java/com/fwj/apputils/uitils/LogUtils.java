@@ -5,7 +5,8 @@ import java.util.List;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.fwj.mobilesafe.ConstantValue;
+import com.fwj.apputils.ConstantValue;
+
 
 /*
  * File Name: LogUtils.java 

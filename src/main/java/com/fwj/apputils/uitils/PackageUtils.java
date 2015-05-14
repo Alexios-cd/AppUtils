@@ -1,5 +1,21 @@
 package com.fwj.apputils.uitils;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -19,23 +35,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.fwj.mobilesafe.uitils.ShellUtils.CommandResult;
 
 /**
  * 主要功能：<br>
@@ -291,7 +290,7 @@ public class PackageUtils {
 	}
 
 	/**
-	 * App installation location settings values, same to {@link #PackageHelper}
+	 * App installation location settings values, same to
 	 */
 	public static final int APP_INSTALL_AUTO = 0;
 	public static final int APP_INSTALL_INTERNAL = 1;
@@ -388,7 +387,7 @@ public class PackageUtils {
 				.append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install ")
 				.append(pmParams == null ? "" : pmParams).append(" ")
 				.append(filePath.replace(" ", "\\ "));
-		CommandResult commandResult = ShellUtils.execCommand(
+		ShellUtils.CommandResult commandResult = ShellUtils.execCommand(
 				command.toString(), !isSystemApplication(), true);
 		if (commandResult.successMsg != null
 				&& (commandResult.successMsg.contains("Success") || commandResult.successMsg
@@ -532,7 +531,6 @@ public class PackageUtils {
 
 	/**
 	 * 智能卸载应用，如果是系统应用或已经root，则静默卸载，否则一般卸载
-	 * @param context
 	 * @param packageName package name of app
 	 * @return whether package name is empty
 	 * @return
@@ -570,7 +568,7 @@ public class PackageUtils {
 	 * 
 	 * @param packageName package name of app
 	 * @return
-	 * @see #uninstallSilent(Context, String, boolean)
+	 *
 	 */
 	public static int uninstallSilent(String packageName) {
 		return uninstallSilent(packageName, true);
@@ -585,7 +583,6 @@ public class PackageUtils {
 	 * permission, if you are system app.</li>
 	 * </ul>
 	 * 
-	 * @param context file path of package
 	 * @param packageName package name of app
 	 * @param isKeepData whether keep the data and cache directories around after package removal
 	 * @return <ul>
@@ -607,7 +604,7 @@ public class PackageUtils {
 				.append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm uninstall")
 				.append(isKeepData ? " -k " : " ")
 				.append(packageName.replace(" ", "\\ "));
-		CommandResult commandResult = ShellUtils.execCommand(
+		ShellUtils.CommandResult commandResult = ShellUtils.execCommand(
 				command.toString(), !isSystemApplication(), true);
 		if (commandResult.successMsg != null
 				&& (commandResult.successMsg.contains("Success") || commandResult.successMsg
@@ -630,7 +627,6 @@ public class PackageUtils {
 	/**
 	 * whether context is system application
 	 * 
-	 * @param context
 	 * @return
 	 */
 	public static boolean isSystemApplication() {
@@ -644,7 +640,6 @@ public class PackageUtils {
 	/**
 	 * whether packageName is system application
 	 * 
-	 * @param UIUtils.getContext()
 	 * @param packageName
 	 * @return
 	 */
@@ -694,7 +689,6 @@ public class PackageUtils {
 	 * <li>You should add <strong>android.permission.GET_TASKS</strong> in manifest</li>
 	 * </ul>
 	 * 
-	 * @param context
 	 * @param packageName
 	 * @return if params error or task stack is null, return null, otherwise retun whether the app is on the top of
 	 *         stack
@@ -751,10 +745,9 @@ public class PackageUtils {
 	 * can be set by System Menu Setting->Storage->Prefered install location
 	 * 
 	 * @return
-	 * @see {@link IPackageManager#getInstallLocation()}
 	 */
 	public static int getInstallLocation() {
-		CommandResult commandResult = ShellUtils
+		ShellUtils.CommandResult commandResult = ShellUtils
 				.execCommand(
 						"LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location",
 						false, true);
@@ -912,7 +905,6 @@ public class PackageUtils {
 	/**
 	 * Installation return code<br/>
 	 * the new package failed because it has specified that it is a test-only package and the caller has not supplied
-	 * the {@link #INSTALL_ALLOW_TEST} flag.
 	 */
 	public static final int INSTALL_FAILED_TEST_ONLY = -15;
 

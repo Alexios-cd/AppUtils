@@ -10,7 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fwj.mobilesafe.applaction.mApplication;
+import com.fwj.apputils.applaction.mApplication;
+
 
 /**
  * UI工蕨类
